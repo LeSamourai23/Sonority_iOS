@@ -24,4 +24,3 @@ class AlbumNetworkModel: ObservableObject {
         }.resume()
     }
 }
-

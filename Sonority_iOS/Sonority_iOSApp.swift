@@ -35,8 +35,8 @@ class AlbumViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     private let database = Database.database().reference()
     
-    func fetchAlbums() {
-        database.child("albums").observeSingleEvent(of: .value) { snapshot in
+    /*func fetchAlbums() {
+        database.child("0")observeSingleEvent(of: .value) { snapshot in
             guard let data = snapshot.value as? [[String: Any]] else { return }
             self.albums = data.compactMap { dict in
                 guard let title = dict["Album"] as? String,
@@ -50,5 +50,5 @@ class AlbumViewModel: ObservableObject {
                 return albumMetadata(title: title, artist: artist, date: date, genres: genres, rymRating: rymRating, ratings: ratings, reviews: reviews, zRank: zRank)
             }
         }
-    }
+    }*/
 }

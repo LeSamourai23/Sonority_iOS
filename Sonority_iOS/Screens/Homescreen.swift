@@ -8,10 +8,20 @@
 import SwiftUI
 
 struct Homescreen: View {
-    @State private var searchText = ""
     @State private var isSearching = false
+    @State private var searchText = ""
+    @State private var searchResults: [Albums] = []
     @EnvironmentObject private var albumNetworkModel: AlbumNetworkModel
-
+    var albums = loadCSV(from: "output")
+    
+    var filteredResults: [Albums] {
+        if searchText.isEmpty {
+            return searchResults
+        } else {
+            return searchResults.filter { $0.album.lowercased().contains(searchText.lowercased()) }
+        }
+    }
+    
     var body: some View {
         NavigationView{
             GeometryReader{ geo in
@@ -45,7 +55,7 @@ struct Homescreen: View {
                             .navigationBarHidden(true)
                             .navigationBarBackButtonHidden(true)
                             
-
+                            
                         }
                         .padding(.horizontal)
                         .padding(.top, 50)
@@ -63,7 +73,7 @@ struct Homescreen: View {
                                     Text("with")
                                         .foregroundColor(.white.opacity(0.7))
                                 }
-                            
+                                
                                 Image("Logo")
                                     .resizable()
                                     .scaledToFill()
@@ -78,10 +88,10 @@ struct Homescreen: View {
                             .padding(.top, 0)
                             .opacity(isSearching ? 0 : 1)
                             .animation(.easeInOut(duration: 0.3))
-
                             
-                            HStack {
-                                TextField("Search", text: $searchText, onEditingChanged: { isEditing in
+                            
+                            /*HStack {
+                                TextField("Search", text: $searchKeyword,onEditingChanged: { isEditing in
                                     withAnimation {
                                         self.isSearching = isEditing
                                     }
@@ -95,6 +105,7 @@ struct Homescreen: View {
                                     RoundedRectangle(cornerRadius: 40)
                                         .foregroundColor(inpColor.opacity(0)))
                                 .padding(.horizontal)
+                                
                                 Image(systemName: "magnifyingglass")
                                     .foregroundColor(.white)
                                 
@@ -103,21 +114,64 @@ struct Homescreen: View {
                             .padding(.vertical, 4)
                             .background(inpColor.opacity(0.9))
                             .cornerRadius(50)
-                            .padding(.top, isSearching ? -320 : 0)
+                            .padding(.top, isSearching ? -320 : 0)*/
+                            
+                            VStack {
+                                HStack {
+                                    TextField("Search", text: $searchText, onEditingChanged: { isEditing in
+                                        withAnimation {
+                                            self.isSearching = isEditing
+                                        }
+                                    }, onCommit: {
+                                        // Perform search action
+                                    })
+                                        .foregroundColor(.white)
+                                        .padding(.horizontal)
+                                        .padding(.vertical, 20)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 40)
+                                                .foregroundColor(inpColor.opacity(0)))
+                                        .padding(.horizontal)
+
+                                    Image(systemName: "magnifyingglass")
+                                        .foregroundColor(.white)
+                                }
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 4)
+                                .background(inpColor.opacity(0.9))
+                                .cornerRadius(50)
+                            
+                                List(filteredResults, id: \.self) { album in
+                                    NavigationLink(destination: DetailView(album: album, albumsData: searchResults)) {
+                                    Text(album.album)
+                                        .foregroundColor(.black)
+                                }
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .foregroundColor(bgColor)
+                            }
+                                .opacity(isSearching ? 1 : 0)
+                                .listStyle(DefaultListStyle())
+                                .foregroundColor(Color.black)
+                        }
+                        .padding(.top, isSearching ? -320 : 0)
                             
                             Spacer()
                         }
+                        .onAppear {
+                            searchResults = loadCSV(from: "output")}
                     }
                     .ignoresSafeArea()
                 }
-            }
-            
-            .ignoresSafeArea()
+        }
+        .ignoresSafeArea()
+    }
+}
+
+    struct Homescreen_Previews: PreviewProvider {
+        static var previews: some View {
+            Homescreen()
         }
     }
 }
-struct Homescreen_Previews: PreviewProvider {
-    static var previews: some View {
-        Homescreen()
-    }
-}
+
+
