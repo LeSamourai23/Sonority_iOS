@@ -5,19 +5,39 @@ struct AlbumDetailView: View {
     var albumsData: [Albums] // Array of all albums data
 
     var body: some View {
-        VStack {
-            Text(album.album)
-                .font(.largeTitle)
-            
-            Text(album.artist)
-            
-            Text(album.date)
-            
-            Text(album.genres)
-            
-            Text(album.rymRating)
-            
-            
+        GeometryReader{ geo in
+            ZStack{
+                
+                Color.black
+                    .ignoresSafeArea()
+                
+                VStack {
+                    
+                    Text(album.album)
+                        .font(.largeTitle)
+                        .foregroundColor(.white)
+                    
+                    VStack{
+                        Text(album.artist)
+                            .foregroundColor(.white)
+                            .font(.title3)
+                        
+                        Text(album.date)
+                            .foregroundColor(.white)
+                        
+                        Text(album.genres)
+                            .foregroundColor(.white)
+                        
+                        Text(album.rymRating)
+                            .foregroundColor(.white)
+                    }
+                }
+            }
+            .ignoresSafeArea()
+            .onAppear {
+                // Set the navigation bar background color to black
+                UINavigationBar.appearance().backgroundColor = UIColor.black
+            }
         }
     }
 }

@@ -140,18 +140,22 @@ struct Homescreen: View {
                                 .padding(.vertical, 4)
                                 .background(inpColor.opacity(0.9))
                                 .cornerRadius(50)
-                            
+                                    
                                 List(filteredResults, id: \.self) { album in
                                     NavigationLink(destination: DetailView(album: album, albumsData: searchResults)) {
-                                    Text(album.album)
-                                        .foregroundColor(.black)
-                                }
+                                        Text(album.album)
+                                            .foregroundColor(.white)
+                                    }
                                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    .listRowBackground(Color.black)
                                     .foregroundColor(bgColor)
-                            }
+                                    .listRowInsets(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
+                                }
+                                .listStyle(PlainListStyle())
+                                .environment(\.defaultMinListRowHeight, 50)
                                 .opacity(isSearching ? 1 : 0)
-                                .listStyle(DefaultListStyle())
-                                .foregroundColor(Color.black)
+                                .background(Color.clear) // Set the background color of the entire view hierarchy to clear
+                                .edgesIgnoringSafeArea(.all) // Ignore safe area insets
                         }
                         .padding(.top, isSearching ? -320 : 0)
                             

@@ -11,6 +11,7 @@ import FirebaseDatabase
 import Combine
 
 @main
+
 struct Sonority_iOSApp: App {
     
     @StateObject var viewModel = AuthViewModel()
